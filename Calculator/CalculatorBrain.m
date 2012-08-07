@@ -10,29 +10,29 @@
 #import <math.h>
 
 @interface CalculatorBrain()
-@property (nonatomic, strong) NSMutableArray *operandStack;
+@property (nonatomic, strong) NSMutableArray *programStack;
 @end
 
 @implementation CalculatorBrain
 
-@synthesize operandStack = _operandStack;
+@synthesize programStack = _programStack;
 
-- (NSMutableArray *)operandStack {
-    if (!_operandStack) _operandStack=[[NSMutableArray alloc] init];
-    return _operandStack;
+- (NSMutableArray *)programStack {
+    if (!_programStack) _programStack=[[NSMutableArray alloc] init];
+    return _programStack;
 }
 
 - (void)pushOperand:(double)operand {
-    [self.operandStack addObject:[NSNumber numberWithDouble:operand]];
+    [self.programStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
-- (double)popOperand {
-    NSNumber *operandObject = self.operandStack.lastObject;
-    if (operandObject) [self.operandStack removeLastObject];
-    return operandObject.doubleValue;
-}
 
 - (double)performOperation:(NSString *)operation {
+    [self.programStack addObject:operation];
+    return [CalculatorBrain runProgram:self.program];
+}
+
+/*
     double result = 0;
     if ([operation isEqualToString:@"+"]) {
         result = self.popOperand + self.popOperand;
@@ -64,14 +64,14 @@
     
     return result;
 }
-
+*/
 
 -(void)clearStack {
-    [self.operandStack removeAllObjects];
+    [self.programStack removeAllObjects];
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"stack = %@", self.operandStack];
+    return [NSString stringWithFormat:@"stack = %@", self.programStack];
 }
 
 @end
