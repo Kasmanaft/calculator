@@ -72,6 +72,10 @@
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
 
+- (IBAction)testSetPressed:(UIButton *)sender {
+    self.display.text = sender.currentTitle;
+}
+
 - (IBAction)operationPressed:(UIButton *)sender {
     if ([sender.currentTitle isEqualToString:@"+/-"]) {
         if(![self.display.text isEqualToString:@"0"]){
