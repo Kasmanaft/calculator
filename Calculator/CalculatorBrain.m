@@ -37,7 +37,7 @@
 }
 
 +(NSString *)descriptionOfProgram:(id)program{
-    return @"6+3";
+    return @"Implement this in assigment #2";
 }
 
 +(double)popOperandOffStack:(NSMutableArray *)stack{
