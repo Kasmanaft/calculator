@@ -42,8 +42,40 @@
 
 +(double)popOperandOffStack:(NSMutableArray *)stack{
     double result=0;
-    // pop operand off the stack
-    // if operation, need to recursive evaluate
+    
+    id topOfStack = [stack lastObject];
+    if(topOfStack) [stack removeLastObject];
+    
+    if([topOfStack isKindOfClass:[NSNumber class]]) {
+        return [topOfStack doubleValue];
+    } else if ([topOfStack isKindOfClass:[NSString class]]){
+        NSString *operation = topOfStack;
+        if ([operation isEqualToString:@"+"]) {
+            result = [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+        } else if ([@"*" isEqualToString:operation]) {
+            result = [self popOperandOffStack:stack] * [self popOperandOffStack:stack];
+        } else if ([@"-" isEqualToString:operation]) {
+            result = - [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+        } else if ([@"/" isEqualToString:operation]) {
+            double divisor=[self popOperandOffStack:stack];
+            if (divisor)
+                result = [self popOperandOffStack:stack] / divisor;
+            else
+                result=0;
+        } else if ([@"sin" isEqualToString:operation]) {
+            result=sin([self popOperandOffStack:stack]);
+        } else if ([@"cos" isEqualToString:operation]) {
+            result=cos([self popOperandOffStack:stack]);
+        } else if ([@"sqrt" isEqualToString:operation]) {
+            result=sqrt([self popOperandOffStack:stack]);
+        } else if ([@"log" isEqualToString:operation]) {
+            result=log([self popOperandOffStack:stack]);
+        } else if ([@"π" isEqualToString:operation]) {
+            result=M_PI;
+        } else if ([@"e" isEqualToString:operation]) {
+            result=M_E;
+        }
+    }
     return result;
 }
 
@@ -55,39 +87,6 @@
     return [self popOperandOffStack:stack];
 }
 
-/*
-    double result = 0;
-    if ([operation isEqualToString:@"+"]) {
-        result = self.popOperand + self.popOperand;
-    } else if ([@"*" isEqualToString:operation]) {
-        result = self.popOperand * self.popOperand;
-    } else if ([@"-" isEqualToString:operation]) {
-        result = - self.popOperand + self.popOperand;
-    } else if ([@"/" isEqualToString:operation]) {
-        double divisor=self.popOperand;
-        if (divisor)
-            result = self.popOperand / divisor;
-        else
-            result=0;
-    } else if ([@"sin" isEqualToString:operation]) {
-        result=sin(self.popOperand);
-    } else if ([@"cos" isEqualToString:operation]) {
-        result=cos(self.popOperand);
-    } else if ([@"sqrt" isEqualToString:operation]) {
-        result=sqrt(self.popOperand);
-    } else if ([@"log" isEqualToString:operation]) {
-        result=log(self.popOperand);
-    } else if ([@"π" isEqualToString:operation]) {
-        result=M_PI;
-    } else if ([@"e" isEqualToString:operation]) {
-        result=M_E;
-    }
-    
-    [self pushOperand:result];
-    
-    return result;
-}
-*/
 
 -(void)clearStack {
     [self.programStack removeAllObjects];
