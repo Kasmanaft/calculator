@@ -36,6 +36,10 @@
     return [self.programStack copy];
 }
 
++(NSSet *)possibleVariables{
+    return [NSSet setWithObjects:@"a", @"b", @"x", @"π", @"e", nil];
+}
+
 // just pushes the operand onto our stack internal data structure
 - (void)pushOperand:(double)operand {
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
@@ -105,11 +109,10 @@
     if([variableValues isKindOfClass:[NSMutableDictionary class]]){
         NSMutableArray *result = [[NSMutableArray alloc] init];
         NSEnumerator *enumerator = [program objectEnumerator];
-        NSSet *possibleVariables = [NSSet setWithObjects:@"a", @"b", @"x", @"π", @"e", nil];
         id object;
         
         while ((object = [enumerator nextObject])) {
-            if ([object isKindOfClass:[NSString class]] && [possibleVariables member:object]) {
+            if ([object isKindOfClass:[NSString class]] && [[self possibleVariables] member:object]) {
                 [result addObject:[NSNumber numberWithDouble:[[variableValues objectForKey:object] doubleValue]]];
             }else
                 [result addObject:object]; 

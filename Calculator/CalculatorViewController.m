@@ -75,6 +75,7 @@
         self.display.text=[self.display.text substringToIndex:(displayLength-1)];
     else
         self.display.text=@"0";
+    //Will be used for 'Undo' buttons
     [self updateVariablesUsedInProgram];
 }
 
@@ -84,7 +85,6 @@
     self.history.text=[self.history.text stringByAppendingFormat:@" %@", self.display.text ];
     [self.brain pushOperand:[self.display.text doubleValue]];
     self.userIsInTheMiddleOfEnteringANumber = NO;
-    [self updateVariablesUsedInProgram];
 }
 
 - (IBAction)testSetPressed:(UIButton *)sender {
