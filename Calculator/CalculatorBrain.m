@@ -127,17 +127,14 @@
 }
 
 +(NSSet *)variablesUsedInProgram:(id) program{
-    NSMutableSet *result = [[NSMutableSet alloc] init];
-    NSEnumerator *enumerator = [program objectEnumerator];
+    // Should be nil if no variables used
+    NSMutableSet *result = [NSMutableSet setWithArray:program];
     NSSet *possibleVariables = [NSSet setWithObjects:@"a", @"b", @"x", nil];
-    id object;
-    
-    while ((object = [enumerator nextObject])) {
-        if ([object isKindOfClass:[NSString class]] && [possibleVariables member:object]) {
-            [result addObject:object];
-        }
-    }
-    return result;
+    if([result intersectsSet:possibleVariables]){
+        [result intersectSet:possibleVariables];
+        return result;
+    }else
+        return nil;
 }
 
 -(void)clearStack {
