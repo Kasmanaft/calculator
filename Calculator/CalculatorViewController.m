@@ -30,7 +30,7 @@
     if (!_brain) {
         _brain = [[CalculatorBrain alloc] init];
         _brain.variablesDictionary=self.variablesDictionary;
-        [_brain addObserver:self forKeyPath:@"operandsInStack" options:NSKeyValueObservingOptionNew context:NULL];
+        [_brain addObserver:self forKeyPath:@"programStack" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return _brain;
 }
@@ -42,6 +42,7 @@
 }
 
 // programStack changes observer
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
 }

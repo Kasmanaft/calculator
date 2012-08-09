@@ -21,7 +21,6 @@
 
 @synthesize programStack = _programStack;
 @synthesize variablesDictionary = _variablesDictionary;
-@synthesize operandsInStack = _operandsInStack;
 
 - (NSMutableArray *)programStack {
     // lazily instantiate
@@ -43,11 +42,13 @@
 
 // just pushes the operand onto our stack internal data structure
 - (void)pushOperand:(NSString *)operand {
+    [self willChangeValueForKey:@"programStack"];
     if([CalculatorBrain isVariable:operand])
         [self.programStack addObject:operand];
     else
         [self.programStack addObject:[NSNumber numberWithDouble:[operand doubleValue]]];
-    self.operandsInStack = [self.programStack count];
+    [self didChangeValueForKey:@"programStack"];
+
 }
 
 // just pushes the operation onto our stack internal data structure
@@ -151,8 +152,9 @@
 }
 
 -(void)clearStack {
+    [self willChangeValueForKey:@"programStack"];
     [self.programStack removeAllObjects];
-    self.operandsInStack = [self.programStack count];
+    [self didChangeValueForKey:@"programStack"];
 }
 
 -(NSString *)description {
