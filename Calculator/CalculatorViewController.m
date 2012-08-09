@@ -24,6 +24,8 @@
 @synthesize brain = _brain;
 @synthesize variablesDictionary = _variablesDictionary;
 
+// Getters & Setters
+
 - (CalculatorBrain *)brain {
     if (!_brain) {
         _brain = [[CalculatorBrain alloc] init];
@@ -37,6 +39,8 @@
     if(!_variablesDictionary) _variablesDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:M_PI], @"π", [NSNumber numberWithDouble:M_E], @"e", nil];
     return _variablesDictionary;
 }
+
+// Buttons
 
 - (IBAction)digitPressed:(UIButton *)sender {
     
@@ -99,12 +103,12 @@
         [self clearVariablesDictionary];
     }
     [self updateVariablesUsedInProgram];
-    double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:[self.variablesDictionary copy]];
-    self.display.text = [NSString stringWithFormat:@"%g", result];
-}
-
--(void)clearVariablesDictionary{
-    [self.variablesDictionary removeObjectsForKeys:[NSArray arrayWithObjects:@"a", @"b", @"x", nil]];
+    
+    // Don't re-calculate if variables on display
+    if(![[CalculatorBrain possibleVariables] member:self.display.text]){
+        double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:[self.variablesDictionary copy]];
+        self.display.text = [NSString stringWithFormat:@"%g", result];
+    }
 }
 
 - (IBAction)operationPressed:(UIButton *)sender {
@@ -130,6 +134,12 @@
         self.display.text = [NSString stringWithFormat:@"%g", result];
         [self updateVariablesUsedInProgram];
     }
+}
+
+// Private
+
+-(void)clearVariablesDictionary{
+    [self.variablesDictionary removeObjectsForKeys:[NSArray arrayWithObjects:@"a", @"b", @"x", nil]];
 }
 
 -(void)updateVariablesUsedInProgram {
