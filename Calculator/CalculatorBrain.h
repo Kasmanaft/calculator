@@ -22,6 +22,7 @@
 // since last clear
 @property (readonly) id program;
 @property (nonatomic, weak) NSMutableDictionary *variablesDictionary;
+@property (nonatomic) NSUInteger operandsInStack;
 
 // runs the program (obtained from the program @property of a CalculatorBrain instance)
 // if the last thing done in the program was pushOperand:, this returns that operand

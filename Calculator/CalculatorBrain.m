@@ -21,6 +21,7 @@
 
 @synthesize programStack = _programStack;
 @synthesize variablesDictionary = _variablesDictionary;
+@synthesize operandsInStack = _operandsInStack;
 
 - (NSMutableArray *)programStack {
     // lazily instantiate
@@ -46,6 +47,7 @@
         [self.programStack addObject:operand];
     else
         [self.programStack addObject:[NSNumber numberWithDouble:[operand doubleValue]]];
+    self.operandsInStack = [self.programStack count];
 }
 
 // just pushes the operation onto our stack internal data structure
@@ -150,6 +152,7 @@
 
 -(void)clearStack {
     [self.programStack removeAllObjects];
+    self.operandsInStack = [self.programStack count];
 }
 
 -(NSString *)description {
