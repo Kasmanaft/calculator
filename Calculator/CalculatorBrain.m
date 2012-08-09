@@ -58,11 +58,47 @@
 }
 
 +(NSString *)descriptionOfProgram:(id)program{
-    return @"Implement this in assigment #2";
+    NSMutableArray *stack;
+    if([program isKindOfClass:[NSArray class]]){
+        stack = [program mutableCopy];
+    }
+    return [self descriptionOfTopOfStack:stack];
 }
 
 +(NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack{
-    return @"Implement this in assigment #2";
+    NSString *operation;
+    id topOfStack = [stack lastObject];
+    if(topOfStack) [stack removeLastObject];
+    
+    if([self isDigit:topOfStack]) {
+        operation = [topOfStack stringValue];
+    } else if ([self isOperation:topOfStack]){
+        operation = topOfStack;
+        /*
+        if ([operation isEqualToString:@"+"]) {
+            result = [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+        } else if ([@"*" isEqualToString:operation]) {
+            result = [self popOperandOffStack:stack] * [self popOperandOffStack:stack];
+        } else if ([@"-" isEqualToString:operation]) {
+            result = - [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+        } else if ([@"/" isEqualToString:operation]) {
+            double divisor=[self popOperandOffStack:stack];
+            if (divisor)
+                result = [self popOperandOffStack:stack] / divisor;
+            else
+                result=0;
+        } else if ([@"sin" isEqualToString:operation]) {
+            result=sin([self popOperandOffStack:stack]);
+        } else if ([@"cos" isEqualToString:operation]) {
+            result=cos([self popOperandOffStack:stack]);
+        } else if ([@"sqrt" isEqualToString:operation]) {
+            result=sqrt([self popOperandOffStack:stack]);
+        } else if ([@"log" isEqualToString:operation]) {
+            result=log([self popOperandOffStack:stack]);
+        }
+        */
+    }
+    return operation;
 }
 
 +(BOOL)isDigit:(id)operand{

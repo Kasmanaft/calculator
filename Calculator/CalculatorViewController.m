@@ -19,7 +19,7 @@
 
 @synthesize display = _display;
 @synthesize variablesUsedInProgram = _variablesUsedInProgram;
-@synthesize history = _history;
+@synthesize descriptionOfProgram = _descriptionOfProgram;
 @synthesize userIsInTheMiddleOfEnteringANumber = _userIsInTheMiddleOfEnteringANumber;
 @synthesize brain = _brain;
 @synthesize variablesDictionary = _variablesDictionary;
@@ -44,7 +44,7 @@
 // programStack changes observer
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
+    self.descriptionOfProgram.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
 // Buttons
