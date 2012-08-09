@@ -42,7 +42,7 @@
 
 // just pushes the operand onto our stack internal data structure
 - (void)pushOperand:(NSString *)operand {
-    if([[CalculatorBrain possibleVariables] member:operand])
+    if([CalculatorBrain isVariable:operand])
         [self.programStack addObject:operand];
     else
         [self.programStack addObject:[NSNumber numberWithDouble:[operand doubleValue]]];
@@ -51,12 +51,27 @@
 // just pushes the operation onto our stack internal data structure
 - (double)performOperation:(NSString *)operation {
     [self.programStack addObject:operation];
-    //return [CalculatorBrain runProgram:self.program];
     return [CalculatorBrain runProgram:self.program usingVariableValues:[self.variablesDictionary copy]];
 }
 
 +(NSString *)descriptionOfProgram:(id)program{
     return @"Implement this in assigment #2";
+}
+
++(NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack{
+    return @"Implement this in assigment #2";
+}
+
++(BOOL)isDigit:(id)operand{
+    return [operand isKindOfClass:[NSNumber class]];
+}
+
++(BOOL)isOperation:(NSString *)operand{
+    return [operand isKindOfClass:[NSString class]] && ![[self possibleVariables] containsObject:operand];
+}
+
++(BOOL)isVariable:(id)operand{
+    return [operand isKindOfClass:[NSString class]] && [[self possibleVariables] containsObject:operand];
 }
 
 // if the top thing on the passed stack is an operand, return it
@@ -68,9 +83,9 @@
     id topOfStack = [stack lastObject];
     if(topOfStack) [stack removeLastObject];
     
-    if([topOfStack isKindOfClass:[NSNumber class]]) {
+    if([self isDigit:topOfStack]) {
         return [topOfStack doubleValue];
-    } else if ([topOfStack isKindOfClass:[NSString class]]){
+    } else if ([self isOperation:topOfStack]){
         NSString *operation = topOfStack;
         if ([operation isEqualToString:@"+"]) {
             result = [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
@@ -109,21 +124,17 @@
 }
 
 +(double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues {
-    if([variableValues isKindOfClass:[NSMutableDictionary class]]){
-        NSMutableArray *result = [[NSMutableArray alloc] init];
-        NSEnumerator *enumerator = [program objectEnumerator];
-        id object;
-        
-        while ((object = [enumerator nextObject])) {
-            if ([object isKindOfClass:[NSString class]] && [[self possibleVariables] member:object]) {
-                [result addObject:[NSNumber numberWithDouble:[[variableValues objectForKey:object] doubleValue]]];
-            }else
-                [result addObject:object]; 
-        }
-        return [self runProgram:result];
-    }else{
-        return [self runProgram:program];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSEnumerator *enumerator = [program objectEnumerator];
+    id object;
+    // NB! use replaceObjectAtIndex:withObject: instead
+    while ((object = [enumerator nextObject])) {
+        if ([self isVariable:object]) {
+            [result addObject:[NSNumber numberWithDouble:[[variableValues objectForKey:object] doubleValue]]];
+        }else
+            [result addObject:object]; 
     }
+    return [self runProgram:result];
 }
 
 +(NSSet *)variablesUsedInProgram:(id) program{

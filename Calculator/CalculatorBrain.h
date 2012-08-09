@@ -33,6 +33,9 @@
 // a string representing (to an end user) the passed program
 // (programs are obtained from the program @property of a CalculatorBrain instance)
 +(NSString *)descriptionOfProgram:(id) program;
+//+(NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack;
++(BOOL)isOperation:(NSString *)operand;
++(BOOL)isVariable:(NSString *)operand;
 
 +(NSSet *)variablesUsedInProgram:(id) program;
 +(NSSet *)possibleVariables;

@@ -105,14 +105,14 @@
     [self updateVariablesUsedInProgram];
     
     // Don't re-calculate if variables on display
-    if(![[CalculatorBrain possibleVariables] member:self.display.text]){
+    if(![CalculatorBrain isVariable:self.display.text]){
         double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:[self.variablesDictionary copy]];
         self.display.text = [NSString stringWithFormat:@"%g", result];
     }
 }
 
 - (IBAction)operationPressed:(UIButton *)sender {
-    if([[CalculatorBrain possibleVariables] member:sender.currentTitle]){
+    if([CalculatorBrain isVariable:sender.currentTitle]){
         if (self.userIsInTheMiddleOfEnteringANumber)
             [self enterPressed];
         self.display.text=sender.currentTitle;
