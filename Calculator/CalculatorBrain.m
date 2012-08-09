@@ -41,8 +41,11 @@
 }
 
 // just pushes the operand onto our stack internal data structure
-- (void)pushOperand:(double)operand {
-    [self.programStack addObject:[NSNumber numberWithDouble:operand]];
+- (void)pushOperand:(NSString *)operand {
+    if([[CalculatorBrain possibleVariables] member:operand])
+        [self.programStack addObject:operand];
+    else
+        [self.programStack addObject:[NSNumber numberWithDouble:[operand doubleValue]]];
 }
 
 // just pushes the operation onto our stack internal data structure

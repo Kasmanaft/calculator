@@ -66,6 +66,7 @@
     self.display.text=@"0";
     self.history.text=@"";
     [self.brain clearStack];
+    [self clearVariablesDictionary]; // Not sure
     [self updateVariablesUsedInProgram];
 }
 
@@ -83,7 +84,7 @@
     if([self.history.text hasSuffix:@" ="])
         self.history.text=[self.history.text substringToIndex:(self.history.text.length-2)];
     self.history.text=[self.history.text stringByAppendingFormat:@" %@", self.display.text ];
-    [self.brain pushOperand:[self.display.text doubleValue]];
+    [self.brain pushOperand:self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
 
@@ -95,22 +96,30 @@
         [self.variablesDictionary setDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
                                           [NSNumber numberWithDouble:1], @"a", [NSNumber numberWithDouble:2], @"b", [NSNumber numberWithDouble:3], @"x", nil]];
     } else {
-        [self.variablesDictionary removeObjectsForKeys:[NSArray arrayWithObjects:@"a", @"b", @"x", nil]];
+        [self clearVariablesDictionary];
     }
     [self updateVariablesUsedInProgram];
     double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:[self.variablesDictionary copy]];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
+-(void)clearVariablesDictionary{
+    [self.variablesDictionary removeObjectsForKeys:[NSArray arrayWithObjects:@"a", @"b", @"x", nil]];
+}
+
 - (IBAction)operationPressed:(UIButton *)sender {
-    if ([sender.currentTitle isEqualToString:@"+/-"]) {
+    if([[CalculatorBrain possibleVariables] member:sender.currentTitle]){
+        if (self.userIsInTheMiddleOfEnteringANumber)
+            [self enterPressed];
+        self.display.text=sender.currentTitle;
+        [self enterPressed];
+    } else if ([sender.currentTitle isEqualToString:@"+/-"]) {
         if(![self.display.text isEqualToString:@"0"]){
             self.display.text = [NSString stringWithFormat:@"%g", -[self.display.text doubleValue]];
 
             if (!self.userIsInTheMiddleOfEnteringANumber)
                 [self enterPressed];
         }
-        
     } else {
         if (self.userIsInTheMiddleOfEnteringANumber)
             [self enterPressed];
