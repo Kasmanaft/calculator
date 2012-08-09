@@ -21,6 +21,7 @@
 // represents the sequence of operands and operations
 // since last clear
 @property (readonly) id program;
+@property (nonatomic, weak) NSMutableDictionary *variablesDictionary;
 
 // runs the program (obtained from the program @property of a CalculatorBrain instance)
 // if the last thing done in the program was pushOperand:, this returns that operand
@@ -32,5 +33,8 @@
 // a string representing (to an end user) the passed program
 // (programs are obtained from the program @property of a CalculatorBrain instance)
 +(NSString *)descriptionOfProgram:(id) program;
+
++(NSSet *)variablesUsedInProgram:(id) program;
++(NSSet *)possibleVariables;
 
 @end

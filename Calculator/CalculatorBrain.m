@@ -14,7 +14,6 @@
 // contains all operations and operands ever sent to this instance
 // operands are NSNumbers, operations are NSStrings
 @property (nonatomic, strong) NSMutableArray *programStack;
-@property (nonatomic, strong) NSDictionary *variablesDictionary;
 
 @end
 
@@ -29,18 +28,16 @@
     return _programStack;
 }
 
--(NSDictionary *)variablesDictionary {
-    // lazily instantiate
-    if(!_variablesDictionary) _variablesDictionary=[[NSDictionary alloc] init];
-    return _variablesDictionary;
-}
-
 // we must return some object (of any class) that represents
 //  all the operands and operations performed on this instance
 //  so that it can be played back via runProgram:
 // we'll simply return an immutable copy of our internal data structure
 -(id)program{
     return [self.programStack copy];
+}
+
++(NSSet *)possibleVariables{
+    return [NSSet setWithObjects:@"a", @"b", @"x", @"π", @"e", nil];
 }
 
 // just pushes the operand onto our stack internal data structure
@@ -51,7 +48,8 @@
 // just pushes the operation onto our stack internal data structure
 - (double)performOperation:(NSString *)operation {
     [self.programStack addObject:operation];
-    return [CalculatorBrain runProgram:self.program];
+    //return [CalculatorBrain runProgram:self.program];
+    return [CalculatorBrain runProgram:self.program usingVariableValues:[self.variablesDictionary copy]];
 }
 
 +(NSString *)descriptionOfProgram:(id)program{
@@ -91,10 +89,6 @@
             result=sqrt([self popOperandOffStack:stack]);
         } else if ([@"log" isEqualToString:operation]) {
             result=log([self popOperandOffStack:stack]);
-        } else if ([@"π" isEqualToString:operation]) {
-            result=M_PI;
-        } else if ([@"e" isEqualToString:operation]) {
-            result=M_E;
         }
     }
     return result;
@@ -112,7 +106,35 @@
 }
 
 +(double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues {
+    if([variableValues isKindOfClass:[NSMutableDictionary class]]){
+        NSMutableArray *result = [[NSMutableArray alloc] init];
+        NSEnumerator *enumerator = [program objectEnumerator];
+        id object;
+        
+        while ((object = [enumerator nextObject])) {
+            if ([object isKindOfClass:[NSString class]] && [[self possibleVariables] member:object]) {
+                [result addObject:[NSNumber numberWithDouble:[[variableValues objectForKey:object] doubleValue]]];
+            }else
+                [result addObject:object]; 
+        }
+        return [self runProgram:result];
+    }else{
+        return [self runProgram:program];
+    }
+}
 
++(NSSet *)variablesUsedInProgram:(id) program{
+    NSMutableSet *result = [[NSMutableSet alloc] init];
+    NSEnumerator *enumerator = [program objectEnumerator];
+    NSSet *possibleVariables = [NSSet setWithObjects:@"a", @"b", @"x", nil];
+    id object;
+    
+    while ((object = [enumerator nextObject])) {
+        if ([object isKindOfClass:[NSString class]] && [possibleVariables member:object]) {
+            [result addObject:object];
+        }
+    }
+    return result;
 }
 
 -(void)clearStack {
