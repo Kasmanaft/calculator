@@ -66,9 +66,21 @@
         stack = [program mutableCopy];
     }
     while ((result=[self descriptionOfTopOfStack:stack])) {
-        [subParts insertObject:result atIndex:0];
+        result=[self removeParenthesesIfExists:result];
+        [subParts addObject:result];
     }
     return [subParts componentsJoinedByString:@", "];
+}
+
++(NSString *)removeParenthesesIfExists:(NSString *)expression{
+    // Remove () from beggining and end
+    if ([expression hasSuffix:@")"] && [expression hasPrefix:@"("]) {
+        NSRange r;
+        r.location = 1;
+        r.length = [expression length]-2;
+        expression = [expression substringWithRange:r];
+    }
+    return expression;
 }
 
 +(NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack{
@@ -83,12 +95,12 @@
     else if ([self isOperation:topOfStack]){
         NSString *operation = topOfStack;
         if ([self isFunction:operation]) {
-            result = [NSString localizedStringWithFormat:@"%@(%@)",operation,[self descriptionOfTopOfStack:stack]];
+            result = [NSString localizedStringWithFormat:@"%@(%@)",operation,[self removeParenthesesIfExists:[self descriptionOfTopOfStack:stack]]];
         }else{
             NSString *second=[self descriptionOfTopOfStack:stack];
             NSString *format=@"(%@ + %@)";
             if ([@"*" isEqualToString:operation])
-                format=@"(%@ * %@)";
+                format=@"%@ * %@";
             else if ([@"-" isEqualToString:operation])
                 format=@"(%@ - %@)";
             else if ([@"/" isEqualToString:operation])

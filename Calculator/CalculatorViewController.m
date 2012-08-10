@@ -63,8 +63,6 @@
             }
         }
     } else {
-        //if([self.history.text hasSuffix:@" ="])
-        //    self.history.text=[self.history.text substringToIndex:(self.history.text.length-2)];
         if([digit isEqualToString:@"."]) digit=@"0.";
         self.display.text=digit;
         self.userIsInTheMiddleOfEnteringANumber=YES;
@@ -75,7 +73,6 @@
 - (IBAction)clearPressed {
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.display.text=@"0";
-    //self.history.text=@"";
     [self.brain clearStack];
     [self clearVariablesDictionary]; // Not sure
     [self updateVariablesUsedInProgram];
@@ -92,9 +89,6 @@
 }
 
 - (IBAction)enterPressed {
-    //if([self.history.text hasSuffix:@" ="])
-    //    self.history.text=[self.history.text substringToIndex:(self.history.text.length-2)];
-    //self.history.text=[self.history.text stringByAppendingFormat:@" %@", self.display.text ];
     [self.brain pushOperand:self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
@@ -134,12 +128,8 @@
     } else {
         if (self.userIsInTheMiddleOfEnteringANumber)
             [self enterPressed];
-        //else if ([self.history.text hasSuffix:@" ="])
-        //    self.history.text=[self.history.text substringToIndex:(self.history.text.length-2)];
-        //self.history.text=[self.history.text stringByAppendingFormat:@" %@ =", sender.currentTitle ];
         double result = [self.brain performOperation:sender.currentTitle];
         self.display.text = [NSString stringWithFormat:@"%g", result];
-        //[self updateVariablesUsedInProgram];
     }
 }
 
