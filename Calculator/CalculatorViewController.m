@@ -139,7 +139,7 @@
         //self.history.text=[self.history.text stringByAppendingFormat:@" %@ =", sender.currentTitle ];
         double result = [self.brain performOperation:sender.currentTitle];
         self.display.text = [NSString stringWithFormat:@"%g", result];
-        [self updateVariablesUsedInProgram];
+        //[self updateVariablesUsedInProgram];
     }
 }
 

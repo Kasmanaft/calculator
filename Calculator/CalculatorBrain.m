@@ -48,57 +48,55 @@
     else
         [self.programStack addObject:[NSNumber numberWithDouble:[operand doubleValue]]];
     [self didChangeValueForKey:@"programStack"];
-
 }
 
 // just pushes the operation onto our stack internal data structure
 - (double)performOperation:(NSString *)operation {
+    [self willChangeValueForKey:@"programStack"];
     [self.programStack addObject:operation];
+    [self didChangeValueForKey:@"programStack"];
     return [CalculatorBrain runProgram:self.program usingVariableValues:[self.variablesDictionary copy]];
 }
 
 +(NSString *)descriptionOfProgram:(id)program{
     NSMutableArray *stack;
+    NSMutableArray *subParts=[[NSMutableArray alloc] init];
+    NSString *result;
     if([program isKindOfClass:[NSArray class]]){
         stack = [program mutableCopy];
     }
-    return [self descriptionOfTopOfStack:stack];
+    while ((result=[self descriptionOfTopOfStack:stack])) {
+        [subParts insertObject:result atIndex:0];
+    }
+    return [subParts componentsJoinedByString:@", "];
 }
 
 +(NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack{
-    NSString *operation;
+    NSString *result;
     id topOfStack = [stack lastObject];
     if(topOfStack) [stack removeLastObject];
     
-    if([self isDigit:topOfStack]) {
-        operation = [topOfStack stringValue];
-    } else if ([self isOperation:topOfStack]){
-        operation = topOfStack;
-        /*
-        if ([operation isEqualToString:@"+"]) {
-            result = [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
-        } else if ([@"*" isEqualToString:operation]) {
-            result = [self popOperandOffStack:stack] * [self popOperandOffStack:stack];
-        } else if ([@"-" isEqualToString:operation]) {
-            result = - [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
-        } else if ([@"/" isEqualToString:operation]) {
-            double divisor=[self popOperandOffStack:stack];
-            if (divisor)
-                result = [self popOperandOffStack:stack] / divisor;
-            else
-                result=0;
-        } else if ([@"sin" isEqualToString:operation]) {
-            result=sin([self popOperandOffStack:stack]);
-        } else if ([@"cos" isEqualToString:operation]) {
-            result=cos([self popOperandOffStack:stack]);
-        } else if ([@"sqrt" isEqualToString:operation]) {
-            result=sqrt([self popOperandOffStack:stack]);
-        } else if ([@"log" isEqualToString:operation]) {
-            result=log([self popOperandOffStack:stack]);
+    if([self isDigit:topOfStack])
+        return [topOfStack stringValue];
+    else if ([self isVariable:topOfStack])
+        return topOfStack;
+    else if ([self isOperation:topOfStack]){
+        NSString *operation = topOfStack;
+        if ([self isFunction:operation]) {
+            result = [NSString localizedStringWithFormat:@"%@(%@)",operation,[self descriptionOfTopOfStack:stack]];
+        }else{
+            NSString *second=[self descriptionOfTopOfStack:stack];
+            NSString *format=@"(%@ + %@)";
+            if ([@"*" isEqualToString:operation])
+                format=@"(%@ * %@)";
+            else if ([@"-" isEqualToString:operation])
+                format=@"(%@ - %@)";
+            else if ([@"/" isEqualToString:operation])
+                format=@"(%@ / %@)";
+            result = [NSString localizedStringWithFormat:format,[self descriptionOfTopOfStack:stack],second];
         }
-        */
     }
-    return operation;
+    return result;
 }
 
 +(BOOL)isDigit:(id)operand{
@@ -107,6 +105,10 @@
 
 +(BOOL)isOperation:(NSString *)operand{
     return [operand isKindOfClass:[NSString class]] && ![[self possibleVariables] containsObject:operand];
+}
+
++(BOOL)isFunction:(id)operand{
+    return [operand isKindOfClass:[NSString class]] && [[NSSet setWithObjects:@"sin", @"cos", @"sqrt", @"log", nil] containsObject:operand];
 }
 
 +(BOOL)isVariable:(id)operand{
