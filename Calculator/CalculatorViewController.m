@@ -79,11 +79,15 @@
 }
 
 - (IBAction)backspacePressed {
-    NSUInteger displayLength=self.display.text.length;
-    if(displayLength>2 || (![self.display.text hasPrefix:@"-"] && displayLength==2))
-        self.display.text=[self.display.text substringToIndex:(displayLength-1)];
-    else
-        self.display.text=@"0";
+    if (self.userIsInTheMiddleOfEnteringANumber){
+        NSUInteger displayLength=self.display.text.length;
+        if(displayLength>2 || (![self.display.text hasPrefix:@"-"] && displayLength==2))
+            self.display.text=[self.display.text substringToIndex:(displayLength-1)];
+        else
+            self.display.text=@"0";
+    }else{
+        self.display.text=[self.brain popOperandOffProgramStack];
+    }
     //Will be used for 'Undo' buttons
     [self updateVariablesUsedInProgram];
 }

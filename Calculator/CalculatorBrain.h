@@ -16,6 +16,7 @@
 // ... then perform operations on those operands
 -(double)performOperation:(NSString *)operation;
 -(void)clearStack;
+-(NSString *)popOperandOffProgramStack;
 
 // returns an object of unspecified class which
 // represents the sequence of operands and operations

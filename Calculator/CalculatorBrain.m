@@ -58,6 +58,19 @@
     return [CalculatorBrain runProgram:self.program usingVariableValues:[self.variablesDictionary copy]];
 }
 
+-(NSString *)popOperandOffProgramStack{
+    [self willChangeValueForKey:@"programStack"];
+    [self.programStack removeLastObject];
+    id topOfStack = [self.programStack lastObject];
+    [self didChangeValueForKey:@"programStack"];
+    if ([topOfStack isKindOfClass:[NSNumber class]]) {
+        return [topOfStack stringValue];
+    } else if ([CalculatorBrain isOperation:topOfStack]){
+        return [NSString stringWithFormat:@"%g", [self performOperation:topOfStack]];
+    }
+    return topOfStack;
+}
+
 +(NSString *)descriptionOfProgram:(id)program{
     NSMutableArray *stack;
     NSMutableArray *subParts=[[NSMutableArray alloc] init];
