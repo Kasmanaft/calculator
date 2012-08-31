@@ -8,6 +8,7 @@
 
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
+#import "GraphViewController.h"
 
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringANumber;
@@ -33,6 +34,18 @@
         [_brain addObserver:self forKeyPath:@"programStack" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return _brain;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.destinationViewController respondsToSelector:@selector(setBrain:)]) {
+        if ([segue.identifier isEqualToString:@"graphSegue"]) {
+            [segue.destinationViewController setBrain:self.brain];
+        }
+    }
 }
 
 -(NSDictionary *)variablesDictionary {
@@ -74,8 +87,6 @@
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.display.text=@"0";
     [self.brain clearStack];
-    [self clearVariablesDictionary]; // Not sure
-    [self updateVariablesUsedInProgram];
 }
 
 - (IBAction)backspacePressed {
@@ -88,8 +99,6 @@
     }else{
         self.display.text=[self.brain popOperandOffProgramStack];
     }
-    //Will be used for 'Undo' buttons
-    [self updateVariablesUsedInProgram];
 }
 
 - (IBAction)enterPressed {
@@ -97,24 +106,6 @@
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
 
-- (IBAction)testSetPressed:(UIButton *)sender {
-    if ([sender.currentTitle isEqualToString:@"Test 2"]) {
-        [self.variablesDictionary setDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          [NSNumber numberWithDouble:3], @"a", [NSNumber numberWithDouble:4], @"b", [NSNumber numberWithDouble:-4], @"x", nil]];
-    } else if ([sender.currentTitle isEqualToString:@"Test 3"]) {
-        [self.variablesDictionary setDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          [NSNumber numberWithDouble:1], @"a", [NSNumber numberWithDouble:2], @"b", [NSNumber numberWithDouble:3], @"x", nil]];
-    } else {
-        [self clearVariablesDictionary];
-    }
-    [self updateVariablesUsedInProgram];
-    
-    // Don't re-calculate if variables on display
-    if(![CalculatorBrain isVariable:self.display.text]){
-        double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:[self.variablesDictionary copy]];
-        self.display.text = [NSString stringWithFormat:@"%g", result];
-    }
-}
 
 - (IBAction)operationPressed:(UIButton *)sender {
     if([CalculatorBrain isVariable:sender.currentTitle]){
@@ -137,22 +128,5 @@
     }
 }
 
-// Private
-
--(void)clearVariablesDictionary{
-    [self.variablesDictionary removeObjectsForKeys:[NSArray arrayWithObjects:@"a", @"b", @"x", nil]];
-}
-
--(void)updateVariablesUsedInProgram {
-    NSSet *usedVariables = [CalculatorBrain variablesUsedInProgram:self.brain.program];
-    NSString *result = [[NSString alloc] init];
-    NSEnumerator *enumerator = [usedVariables objectEnumerator];
-    id object;
-    
-    while ((object = [enumerator nextObject])) {
-        result = [result stringByAppendingFormat:@" %@=%g", object, [[self.variablesDictionary objectForKey:object] doubleValue] ];
-    }
-    self.variablesUsedInProgram.text = result;
-}
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "CalculatorBrain.h"
-//#import <math.h>
 
 @interface CalculatorBrain()
 
@@ -37,7 +36,7 @@
 }
 
 +(NSSet *)possibleVariables{
-    return [NSSet setWithObjects:@"a", @"b", @"x", @"π", @"e", nil];
+    return [NSSet setWithObjects: @"x", @"π", @"e", nil];
 }
 
 // just pushes the operand onto our stack internal data structure
@@ -201,17 +200,6 @@
             [result addObject:object]; 
     }
     return [self runProgram:result];
-}
-
-+(NSSet *)variablesUsedInProgram:(id) program{
-    // Should be nil if no variables used
-    NSMutableSet *result = [NSMutableSet setWithArray:program];
-    NSSet *possibleVariables = [NSSet setWithObjects:@"a", @"b", @"x", nil];
-    if([result intersectsSet:possibleVariables]){
-        [result intersectSet:possibleVariables];
-        return result;
-    }else
-        return nil;
 }
 
 -(void)clearStack {

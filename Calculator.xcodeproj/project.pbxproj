@@ -16,6 +16,9 @@
 		656E2EFB1589350E00FDB782 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 656E2EF91589350E00FDB782 /* MainStoryboard.storyboard */; };
 		656E2EFE1589350E00FDB782 /* CalculatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 656E2EFD1589350E00FDB782 /* CalculatorViewController.m */; };
 		656E2F0A158946D600FDB782 /* CalculatorBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 656E2F09158946D600FDB782 /* CalculatorBrain.m */; };
+		658E82A915ED0B5300303802 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 658E82A815ED0B5300303802 /* GraphView.m */; };
+		658E82B015ED4DBB00303802 /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 658E82AF15ED4DBB00303802 /* GraphViewController.m */; };
+		658E82B315EE996F00303802 /* AxesDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 658E82B215EE996F00303802 /* AxesDrawer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,12 @@
 		656E2EFD1589350E00FDB782 /* CalculatorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalculatorViewController.m; sourceTree = "<group>"; };
 		656E2F08158946D600FDB782 /* CalculatorBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorBrain.h; sourceTree = "<group>"; };
 		656E2F09158946D600FDB782 /* CalculatorBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorBrain.m; sourceTree = "<group>"; };
+		658E82A715ED0B5300303802 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
+		658E82A815ED0B5300303802 /* GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
+		658E82AE15ED4DBB00303802 /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
+		658E82AF15ED4DBB00303802 /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
+		658E82B115EE996F00303802 /* AxesDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AxesDrawer.h; sourceTree = "<group>"; };
+		658E82B215EE996F00303802 /* AxesDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AxesDrawer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,11 +91,17 @@
 			children = (
 				656E2EF61589350E00FDB782 /* CalculatorAppDelegate.h */,
 				656E2EF71589350E00FDB782 /* CalculatorAppDelegate.m */,
+				658E82A715ED0B5300303802 /* GraphView.h */,
+				658E82A815ED0B5300303802 /* GraphView.m */,
+				658E82B115EE996F00303802 /* AxesDrawer.h */,
+				658E82B215EE996F00303802 /* AxesDrawer.m */,
 				656E2EF91589350E00FDB782 /* MainStoryboard.storyboard */,
 				656E2F08158946D600FDB782 /* CalculatorBrain.h */,
 				656E2F09158946D600FDB782 /* CalculatorBrain.m */,
 				656E2EFC1589350E00FDB782 /* CalculatorViewController.h */,
 				656E2EFD1589350E00FDB782 /* CalculatorViewController.m */,
+				658E82AE15ED4DBB00303802 /* GraphViewController.h */,
+				658E82AF15ED4DBB00303802 /* GraphViewController.m */,
 				656E2EEE1589350E00FDB782 /* Supporting Files */,
 			);
 			name = Calculator;
@@ -172,6 +187,9 @@
 				656E2EF81589350E00FDB782 /* CalculatorAppDelegate.m in Sources */,
 				656E2EFE1589350E00FDB782 /* CalculatorViewController.m in Sources */,
 				656E2F0A158946D600FDB782 /* CalculatorBrain.m in Sources */,
+				658E82A915ED0B5300303802 /* GraphView.m in Sources */,
+				658E82B015ED4DBB00303802 /* GraphViewController.m in Sources */,
+				658E82B315EE996F00303802 /* AxesDrawer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

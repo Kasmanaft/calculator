@@ -38,7 +38,6 @@
 +(BOOL)isOperation:(NSString *)operand;
 +(BOOL)isVariable:(NSString *)operand;
 
-+(NSSet *)variablesUsedInProgram:(id) program;
 +(NSSet *)possibleVariables;
 
 @end
