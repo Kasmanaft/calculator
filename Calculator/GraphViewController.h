@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GraphView.h"
 
 @interface GraphViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet GraphView *graphView;
+@property (nonatomic, strong) CalculatorBrain *brain;
 
 @end

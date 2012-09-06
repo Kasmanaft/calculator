@@ -58,6 +58,11 @@
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     self.descriptionOfProgram.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
+    GraphViewController *detail = [[self.splitViewController viewControllers] lastObject];
+    if(detail){
+        [detail setBrain:self.brain];
+        [[detail graphView] setNeedsDisplay];
+    }
 }
 
 // Buttons
