@@ -62,8 +62,7 @@
 }
 
 
-- (void)setOrigin:(CGPoint)origin
-{
+- (void)setOrigin:(CGPoint)origin {
     _origin = origin;
     [[NSUserDefaults standardUserDefaults] setFloat:_origin.x forKey:@"GraphOriginX"];
     [[NSUserDefaults standardUserDefaults] setFloat:_origin.y forKey:@"GraphOriginY"];
@@ -75,8 +74,7 @@
 // add gesture recognizers to the FaceView
 // set ourselves as the dataSource of the FaceView so we can provide "smileyness"
 
-- (void)setGraphView:(GraphView *)graphView
-{
+- (void)setGraphView:(GraphView *)graphView {
     _graphView = graphView;
     [self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pinch:)]];
     [self.graphView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(panning:)]];
@@ -86,22 +84,18 @@
     self.graphView.dataSource = self;
 }
 
-/*-(GraphView *)graphView{
-    return _graphView;
-}
-*/
 
-- (NSNumber *)xForProgram:(CGFloat)x{
+- (NSNumber *)xForProgram:(CGFloat)x {
     NSNumber *result=[NSNumber numberWithFloat:((x-self.origin.x)/self.scale)];
     return result;
 }
 
--(CGFloat)yForGraph:(double)y{
+-(CGFloat)yForGraph:(double)y {
     double result=self.origin.y-(y*self.scale);
     return result;
 }
 
--(CGFloat)yForX:(CGFloat)x rect:(CGRect)rect{
+-(CGFloat)yForX:(CGFloat)x rect:(CGRect)rect {
     return [self yForGraph:[CalculatorBrain runProgram:[self.brain program] usingVariableValues:[NSMutableDictionary dictionaryWithObjectsAndKeys:[self xForProgram:x], @"x",nil]]];
 }
 
@@ -118,8 +112,7 @@
 // setting the split view's presentsWithGesture to NO means swiping does not hide the master
 //  (only clicking the toolbar button does)
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     self.splitViewController.presentsWithGesture = NO;
     self.splitViewController.delegate = self;
@@ -129,8 +122,7 @@
 // these will only work if we have an outlet called "toolbar"
 // which points to a UIToolbar to put the split view hiding/unhiding UIBarButtonItem into
 
-- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
-{
+- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation {
     return UIInterfaceOrientationIsPortrait(orientation);
 }
 
@@ -140,27 +132,28 @@
 - (void)splitViewController:(UISplitViewController *)svc
      willHideViewController:(UIViewController *)aViewController
           withBarButtonItem:(UIBarButtonItem *)barButtonItem
-       forPopoverController:(UIPopoverController *)pc
-{
+       forPopoverController:(UIPopoverController *)pc {
+    /*
     barButtonItem.title = aViewController.title;
     NSMutableArray *toolbarItems = [self.toolbar.items mutableCopy];
     [toolbarItems insertObject:barButtonItem atIndex:0];
-    self.toolbar.items = toolbarItems;
+    self.toolbar.items = toolbarItems; */
+    self.toolbar.hidden = NO;
 }
 
 // called when the master (left) split view pane appears
 
-- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
-{
+- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    /*
     NSMutableArray *toolbarItems = [self.toolbar.items mutableCopy];
     [toolbarItems removeObject:barButtonItem];
-    self.toolbar.items = toolbarItems;
+    self.toolbar.items = toolbarItems; */
+    self.toolbar.hidden = YES;
 }
 
 // automatically generated when we made the toolbar outlet
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [self setToolbar:nil];
     [super viewDidUnload];
 }

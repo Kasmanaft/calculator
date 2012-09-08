@@ -72,18 +72,20 @@
     CGContextStrokePath(context);
     UIGraphicsPopContext();
     
-    CGContextSetFillColorWithColor(context, CGColorCreate(rgb, (CGFloat[]){ 1, 0, 0, 1 }));
-    UIFont *font = [UIFont systemFontOfSize:12];
+    if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPhone) {
+        CGContextSetFillColorWithColor(context, CGColorCreate(rgb, (CGFloat[]){ 1, 0, 0, 1 }));
+        UIFont *font = [UIFont systemFontOfSize:12];
     
-    NSString *text = [[self.dataSource.brain class] descriptionOfProgram:[self.dataSource.brain program]];
+        NSString *text = [[self.dataSource.brain class] descriptionOfProgram:[self.dataSource.brain program]];
     
-    CGRect textRect;
-    textRect.size = [text sizeWithFont:font];
-    textRect.origin.x = rect.origin.x + 6;
-    textRect.origin.y = rect.size.height - 18;
-    [text drawInRect:textRect withFont:font];
+        CGRect textRect;
+        textRect.size = [text sizeWithFont:font];
+        textRect.origin.x = rect.origin.x + 6;
+        textRect.origin.y = rect.size.height - 18;
+        [text drawInRect:textRect withFont:font];
+    }
     
-    CGContextSetFillColorWithColor(context, CGColorCreate(rgb, (CGFloat[]){ .3, .3, .3, 1 }));
+    CGContextSetFillColorWithColor(context, CGColorCreate(rgb, (CGFloat[]){ 0, 0, 0, 1 }));
     CGContextSetStrokeColorWithColor(context, CGColorCreate(rgb, (CGFloat[]){ 0, 0, 0, 1 }));
     CGColorSpaceRelease(rgb);
     
